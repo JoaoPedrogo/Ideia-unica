@@ -41,7 +41,7 @@ if game.PlaceId == 142823291 then
         local A_2 = "normalchat"
         local Event = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
         Event:FireServer(A_1, A_2)
-return
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Joaotipo/Ideia-unica/master/Teste1.lua", true))()
         game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, LocalPlayer)
 
     end)
