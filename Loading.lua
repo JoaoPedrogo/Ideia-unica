@@ -9,7 +9,7 @@ if game.PlaceId == 189707 then
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Joaotipo/Ideia-unica/master/NaturalDisaster.lua"))()
 end
 
-if game.PlaceId == all then
+if game.PlaceId ==  then
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Joaotipo/Ideia-unica/master/NaturalDisaster.lua"))()
 end
 
