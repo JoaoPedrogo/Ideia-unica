@@ -10,6 +10,10 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHept
     -- MAIN
     local Main = Window:NewTab("Main")
     local MainSection = Main:NewSection("Main")
+	MainSection:NewButton("a","a", function()
+		game.Players.LocalPlayer.Character.CharacterScript:Destroy()
+	end	
+	end)
 
     MainSection:NewButton("Physics gun", "Ganhe uma Physics gun", function()
         --Physics gun
@@ -89,22 +93,13 @@ table.insert(cors,sandbox(LocalScript4,function()
 local render = game:GetService("RunService").RenderStepped
 local contextActionService = game:GetService("ContextActionService")
 local userInputService = game:GetService("UserInputService")
-
 local player = game.Players.LocalPlayer
 local mouse = player:GetMouse()
 local Tool = script.Parent
-
--- Variables for Module Scripts
 local screenSpace = require(Tool:WaitForChild("ScreenSpace"))
-
 local connection
--- Variables for character joints
-
 local neck, shoulder, oldNeckC0, oldShoulderC0 
-
 local mobileShouldTrack = true
-
--- Thourough check to see if a character is sitting
 local function amISitting(character)
 	local t = character.Torso
 	for _, part in pairs(t:GetConnectedParts(true)) do
@@ -113,18 +108,8 @@ local function amISitting(character)
 		end
 	end
 end
-
--- Function to call on renderstepped. Orients the character so it is facing towards
--- the player mouse's position in world space. If character is sitting then the torso
--- should not track
 local function frame(mousePosition)
-	-- Special mobile consideration. We don't want to track if the user was touching a ui
-	-- element such as the movement controls. Just return out of function if so to make sure
-	-- character doesn't track
 	if not mobileShouldTrack then return end
-	
-	-- Make sure character isn't swiming. If the character is swimming the following code will
-	-- not work well; the character will not swim correctly. Besides, who shoots underwater?
 	if player.Character.Humanoid:GetState() ~= Enum.HumanoidStateType.Swimming then
 		local torso = player.Character.Torso
 		local head = player.Character.Head
@@ -133,27 +118,19 @@ local function frame(mousePosition)
 		local angle = math.acos(toMouse:Dot(Vector3.new(0,1,0)))
 		
 		local neckAngle = angle
-	
-		-- Limit how much the head can tilt down. Too far and the head looks unnatural
 		if math.deg(neckAngle) > 110 then
 			neckAngle = math.rad(110)
 		end
 		neck.C0 = CFrame.new(0,1,0) * CFrame.Angles(math.pi - neckAngle,math.pi,0)
-		
-		-- Calculate horizontal rotation
 		local arm = player.Character:FindFirstChild("Right Arm")
 		local fromArmPos = torso.Position + torso.CFrame:vectorToWorldSpace(Vector3.new(
 			torso.Size.X/2 + arm.Size.X/2, torso.Size.Y/2 - arm.Size.Z/2, 0))
 		local toMouseArm = ((mousePosition - fromArmPos) * Vector3.new(1,0,1)).unit
 		local look = (torso.CFrame.lookVector * Vector3.new(1,0,1)).unit
 		local lateralAngle = math.acos(toMouseArm:Dot(look))		
-		
-		-- Check for rogue math
 		if tostring(lateralAngle) == "-1.#IND" then
 			lateralAngle = 0
 		end		
-		
-		-- Handle case where character is sitting down
 		if player.Character.Humanoid:GetState() == Enum.HumanoidStateType.Seated then			
 			
 			local cross = torso.CFrame.lookVector:Cross(toMouseArm)
@@ -164,31 +141,19 @@ local function frame(mousePosition)
 				lateralAngle = -lateralAngle
 			end
 		end	
-		
-		-- Turn shoulder to point to mouse
 		shoulder.C0 = CFrame.new(1,0.5,0) * CFrame.Angles(math.pi/2 - angle,math.pi/2 + lateralAngle,0)	
-		
-		-- If not sitting then aim torso laterally towards mouse
 		if not amISitting(player.Character) then
 			torso.CFrame = CFrame.new(torso.Position, torso.Position + (Vector3.new(
 				mousePosition.X, torso.Position.Y, mousePosition.Z)-torso.Position).unit)
-		else
-			--print("sitting")		
+		else	
 		end	
 	end
 end
-
--- Function to bind to render stepped if player is on PC
 local function pcFrame()
 	frame(mouse.Hit.p)
 end
-
--- Function to bind to touch moved if player is on mobile
 local function mobileFrame(touch, processed)
-	-- Check to see if the touch was on a UI element. If so, we don't want to update anything
 	if not processed then
-		-- Calculate touch position in world space. Uses Stravant's ScreenSpace Module script
-		-- to create a ray from the camera.
 		local test = screenSpace.ScreenToWorld(touch.Position.X, touch.Position.Y, 1)
 		local nearPos = game.Workspace.CurrentCamera.CoordinateFrame:vectorToWorldSpace(screenSpace.ScreenToWorld(touch.Position.X, touch.Position.Y, 1))
 		nearPos = game.Workspace.CurrentCamera.CoordinateFrame.p - nearPos
@@ -199,8 +164,6 @@ local function mobileFrame(touch, processed)
 		end
 		local ray = Ray.new(nearPos, farPos)
 		local part, pos = game.Workspace:FindPartOnRay(ray, player.Character)
-		
-		-- if a position was found on the ray then update the character's rotation
 		if pos then
 			frame(pos)
 		end
@@ -208,29 +171,21 @@ local function mobileFrame(touch, processed)
 end
 
 local oldIcon = nil
--- Function to bind to equip event
 local function equip()
 	local torso = player.Character.Torso
 	
-	-- Setup joint variables
 	neck = torso.Neck	
 	oldNeckC0 = neck.C0
 	shoulder = torso:FindFirstChild("Right Shoulder")
 	oldShoulderC0 = shoulder.C0
 	
-	-- Remember old mouse icon and update current
 	oldIcon = mouse.Icon
 	mouse.Icon = "rbxassetid:// 509381906"
-	
-	-- Bind TouchMoved event if on mobile. Otherwise connect to renderstepped
 	if userInputService.TouchEnabled then
 		connection = userInputService.TouchMoved:connect(mobileFrame)
 	else
 		connection = render:connect(pcFrame)
 	end
-	
-	-- Bind TouchStarted and TouchEnded. Used to determine if character should rotate
-	-- during touch input
 	userInputService.TouchStarted:connect(function(touch, processed)
 		mobileShouldTrack = not processed
 	end)	
@@ -360,7 +315,7 @@ local function WeldTogether(Part0, Part1, JointType, WeldParent)
 		Name = "qCFrameWeldThingy";
 		Part0  = Part0;
 		Part1  = Part1;
-		C0     = CFrame.new();--Part0.CFrame:inverse();
+		C0     = CFrame.new();
 		C1     = RelativeValue and RelativeValue.Value or Part1.CFrame:toObjectSpace(Part0.CFrame); --Part1.CFrame:inverse() * Part0.CFrame;-- Part1.CFrame:inverse();
 		Parent = Part1;
 	})
@@ -619,7 +574,7 @@ mousedown = false
 found = false
 BP = Instance.new("BodyPosition")
 BP.maxForce = Vector3.new(math.huge*math.huge,math.huge*math.huge,math.huge*math.huge) --pwns everyone elses bodyposition
-BP.P = BP.P*10 --faster movement. less bounceback.
+BP.P = BP.P*10
 dist = nil
 point = Instance.new("Part")
 point.Locked = true
@@ -967,6 +922,25 @@ for i,v in pairs(cors) do
 end
     end)
 
+
+
+	MainSection:NewToggle("Chuva de Faca [Lobby]", false, function(t)
+        getgenv().faquinha = t
+        while wait(.50) do
+        if getgenv().faquinha then
+			wait(5)
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-280, 180, 341, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+			game.Players.LocalPlayer.Character.Humanoid:Remove()
+			Instance.new('Humanoid', game.Players.LocalPlayer.Character)
+			game:GetService("Workspace")[game.Players.LocalPlayer.Name]:FindFirstChildOfClass('Humanoid').HipHeight = 2
+			wait(0.30)
+        else
+            break
+            
+        end
+        
+        end
+    end)
     -- PLAYER
     local Player = Window:NewTab("Player")
     local PlayerSection = Player:NewSection("Player")
@@ -979,6 +953,8 @@ end
         game.Players.LocalPlayer.Character.Humanoid.JumpPower = v
     end)
 
+	
+
 
 
     --Teleport
@@ -987,7 +963,7 @@ end
     local TeleSelec = tele:NewSection("Teleportes")
 
     TeleSelec:NewButton("Lobby", "Teleporte para o Lobby", function()
-    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-279.998871, 179.199951, 340.971771, 0.999999881, 3.22571259e-09, -0.000507893157, -3.18074211e-09, 1, 8.85443399e-08, 0.000507893157, -8.85427127e-08, 0.999999881)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-280, 180, 341, 1, 0, 0, 0, 1, 0, 0, 0, 1)
 
 end)
 
@@ -995,6 +971,8 @@ end)
     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-128.410675, 47.3999901, 5.65494823, -0.0086937556, 7.48275326e-08, -0.999962211, 3.81619358e-08, 1, 7.44985726e-08, 0.999962211, -3.75128195e-08, -0.0086937556)
 
 end)
+
+
 
 
 
