@@ -24,6 +24,24 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHept
     end)
 
 
+    --Teleport
+
+    local tele = Window:NewTab("Teleportes")
+    local TeleSelec = tele:NewSection("Teleportes")
+
+    TeleSelec:NewButton("Lobby", "Teleporte para o Lobby", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-280, 170, 341, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+
+end)
+
+    TeleSelec:NewButton("Mapa", "Teleporte para o Mapa", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-128.410675, 47.3999901, 5.65494823, -0.0086937556, 7.48275326e-08, -0.999962211, 3.81619358e-08, 1, 7.44985726e-08, 0.999962211, -3.75128195e-08, -0.0086937556)
+
+end)
+
+
+
+
     --Ui
 
      local themeTab = Window:NewTab("UI Settings")
