@@ -11,6 +11,10 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHept
     local Main = Window:NewTab("Main")
     local MainSection = Main:NewSection("Main")
 
+    MainSection:NewButton("Physics gun", "Ganhe uma Physics gun", function()
+        loadstring(game:HttpGet("https://github.com/Joaotipo/Ideia-unica/blob/master/Gravitation.lua"))()
+    end)
+
     -- PLAYER
     local Player = Window:NewTab("Player")
     local PlayerSection = Player:NewSection("Player")
@@ -22,6 +26,7 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHept
     PlayerSection:NewSlider("Jumppower", "Changes the jumppower", 250, 50, function(v)
         game.Players.LocalPlayer.Character.Humanoid.JumpPower = v
     end)
+
 
 
     --Teleport
