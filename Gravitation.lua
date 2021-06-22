@@ -1,4 +1,3 @@
---Physics gun
 function sandbox(var,func)
 	local env = getfenv(func)
 	local newenv = setmetatable({},{
@@ -30,7 +29,7 @@ Part11 = Instance.new("Part")
 Script12 = Instance.new("Script")
 Part13 = Instance.new("Part")
 Script14 = Instance.new("Script")
-Tool0.Name = "Physics Gun"
+Tool0.Name = "Telekinesis Gun"
 Tool0.Parent = mas
 Tool0.CanBeDropped = false
 Part1.Name = "Handle"
@@ -206,7 +205,7 @@ local function equip()
 	
 	-- Remember old mouse icon and update current
 	oldIcon = mouse.Icon
-	mouse.Icon = "rbxassetid:// 509381906"
+	mouse.Icon = "rbxassetid:// 2184939409"
 	
 	-- Bind TouchMoved event if on mobile. Otherwise connect to renderstepped
 	if userInputService.TouchEnabled then
@@ -822,7 +821,7 @@ function onKeyDown(key,mouse)
 			dist = dist-5 
 		end 
 	end 
-	if key == "" then 
+	if key == "t" then 
 	if (object==nil) then return end 
 	for _,v in pairs(object:children()) do 
 	if v.className == "BodyGyro" then 
@@ -883,7 +882,7 @@ function onKeyDown(key,mouse)
 		color.BrickColor = BrickColor.new("Toothpaste")
 		point.BrickColor = BrickColor.new("Toothpaste")
 	end 
-	if (key=="") then 
+	if (key=="x") then 
 	if (object==nil) then return end 
 	local New = object:clone() 
 	New.Parent = object.Parent 
@@ -907,7 +906,7 @@ function onKeyDown(key,mouse)
 	object = nil
 	objval.Value = nil
 	end 
-	if (key=="") then 
+	if (key=="c") then 
 		local Cube = Instance.new("Part") 
 		Cube.Locked = true 
 		Cube.Size = Vector3.new(4,4,4) 
@@ -940,7 +939,7 @@ function onEquipped(mouse)
 	mouse.Button1Down:connect(function() onButton1Down(mouse) end)
 	mouse.Button1Up:connect(function() mousedown = false end)
 	mouse.KeyDown:connect(function(key) onKeyDown(key,mouse) end)
-	mouse.Icon = "rbxassetid:// 509381906"
+	mouse.Icon = "rbxassetid://2184939409"
 end
 
 tool.Equipped:connect(onEquipped)

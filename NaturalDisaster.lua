@@ -16,6 +16,10 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHept
 
 	end)
 
+	MainSection:NewButton("Buraco Negro ", "a", function()
+	loadstring(game:HttpGet('https://raw.githubusercontent.com/Joaotipo/Ideia-unica/master/BuracoNegro.lua'))()
+	end)
+
 
     --Teleport
 
