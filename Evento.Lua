@@ -1,5 +1,5 @@
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-    local Window = Library.CreateLib("Murder Mystery 2", "Ocean")
+    local Window = Library.CreateLib("Stranger Things", "Ocean")
     local customColors = {
         SchemeColor = Color3.fromRGB(0,255,255),
         Background = Color3.fromRGB(0, 0, 0),
@@ -11,14 +11,18 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHept
     local Main = Window:NewTab("Main")
     local MainSection = Main:NewSection("Main")
 
-	MainSection:NewButton("Gun", "Discrição", function()
-		loadstring(game:HttpGet('https://raw.githubusercontent.com/Joaotipo/Ideia-unica/master/Gravitation.lua'))()
-
-	end)
-
-	MainSection:NewButton("Buraco Negro ", "a", function()
-	loadstring(game:HttpGet('https://raw.githubusercontent.com/Joaotipo/Ideia-unica/master/BuracoNegro.lua'))()
-	end)
+    MainSection:NewToggle("Infinit Speed", false, function(t)
+        getgenv().trinkets = t
+        while wait(0) do
+        if getgenv().trinkets then
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 155
+        else
+            break
+            
+        end
+        
+        end
+    end)
 
 
     --Ui
