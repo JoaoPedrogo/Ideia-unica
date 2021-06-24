@@ -11,6 +11,7 @@ end
 
 --Outro
 
-if game.PlaceId == 123 then
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Joaotipo/Ideia-unica/master/NaturalDisaster.lua"))()
+if game.PlaceId == 5853107391 then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Joaotipo/Ideia-unica/master/Evento.Lua"))()
 end
+
