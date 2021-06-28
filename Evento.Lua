@@ -15,12 +15,10 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHept
         getgenv().trinkets = t
         while wait(0) do
         if getgenv().trinkets then
-            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 155
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 100
         else
             break
-            
         end
-        
         end
     end)
 

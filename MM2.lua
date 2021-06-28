@@ -11,114 +11,34 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHept
 
     -- MAIN
 
+    local noclip = false
+
     local Main = Window:NewTab("Menu")
     local MainSection = Main:NewSection("Menu")
+
+    MainSection:NewToggle("Noclip",false, function(t)
+        noclip = t
+    end) 
     
-
-    MainSection:NewButton("Pegue a arma", "Utilize para pegar a arma", function()
-        game.Workspace.GunDrop.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(2,0,0)
+    
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if noclip == true then
+            game.Players.LocalPlayer.Character.Humanoid:ChangeState(11)
+        end
     end)
 
-    MainSection:NewButton("Pegue o Player", "Utilize um Gear ", function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Joaotipo/Ideia-unica/master/Pega.lua", true))()
+    MainSection:NewToggle("Autopick Gun",false, function(t)
+        if t then
+            sheriff.Character.Humanoid.Died:Connect(function() game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = sheriff.Character.HumanoidRootPart.CFrame end)
+        end
     end)
-
-    MainSection:NewKeybind("Esp", "KeybindInfo", Enum.KeyCode.Z, function ()
-        function getChance()
-            local Event = game:GetService("ReplicatedStorage").GetChance
-            chance = Event:InvokeServer()[1]
-            return chance
-            end
-            
-            
-            function setESP(part, good)
-            if part:FindFirstChild("BoxHandleAdornment") then else
-                local ESP = Instance.new("BoxHandleAdornment")
-                if good then
-                    ESP.Color3 = Color3.fromRGB(17, 164, 255)
-                else
-                    ESP.Color3 = Color3.fromRGB(255, 0, 0)
-                end
-                ESP.ZIndex = 1
-                ESP.AlwaysOnTop = true
-                ESP.Size = part.Size
-                ESP.Transparency = 0.5
-                ESP.Adornee = part
-                ESP.Parent = part
-            end
-            end
-            
-            function getMurderer()
-            
-            local Event = game:GetService("ReplicatedStorage").GetPlayerData
-            local info = Event:InvokeServer()
-            
-            
-            
-            for i,v in pairs(game.Players:GetChildren()) do
-            if info[v.Name] ~= nil then
-            if info[v.Name]["Role"] == "Murderer" then
-            return v
-            end
-            end
-            end
-            end
-            
-            function getSheriff()
-            local Event = game:GetService("ReplicatedStorage").GetPlayerData
-            local info = Event:InvokeServer()
-            
-            
-            
-            for i,v in pairs(game.Players:GetChildren()) do
-            if info[v.Name] ~= nil then
-            if info[v.Name]["Role"] == "Sheriff" then
-            return v
-            end
-            end
-            end
-            end
-            
-            function espMurderer()
-            if getMurderer() ~= nil then
-                for i,v in pairs(getMurderer().Character:GetChildren()) do
-                    if v:IsA("BasePart") then
-                        setESP(v,false)
-                    end
-                end
-            end
-            end
-            
-            function espSheriff()
-            if getSheriff() ~= nil then
-                for i,v in pairs(getSheriff().Character:GetChildren()) do
-                    if v:IsA("BasePart") then
-                        setESP(v,true)
-                    end
-                end
-            end
-            end
-            
-            espSheriff()
-            espMurderer()
-
-    end)
+    
 
 
     -- PLAYER
 
     local Player = Window:NewTab("Player")
     local PlayerSection = Player:NewSection("Player")
-
-    PlayerSection:NewToggle("Noclip", false, function(npca)
-        getgenv().oxi = npca
-    game:GetService("RunService").RenderStepped:Connect(function()
-    if getgenv().oxi then
-        game.Players.LocalPlayer.Character.Humanoid:ChangeState(1)
-    end
-    end)
-end)
-
 
     PlayerSection:NewSlider("Walkspeed", "Changes the walkspeed", 250, 16, function(v)
         game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = v
@@ -128,6 +48,10 @@ end)
         game.Players.LocalPlayer.Character.Humanoid.JumpPower = v
     end)
 
+
+    PlayerSection:NewSlider("Gravity","a ",500,0, function(t)
+        workspace.Gravity = t
+    end)
     --Teleport
 
     local tele = Window:NewTab("Teleportes")
@@ -142,6 +66,9 @@ end)
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-108.300034, 140.699936, 83.0500946, -0.999918878, 0, -0.0127105247, 0, 1, 0, 0.0127105247, 0, -0.999918878)
 
     end)
+
+
+    
 
     TeleSelec:NewButton("Mapa", "Teleporte ao Mapa", function()
         local Workplace = workspace:GetChildren()
