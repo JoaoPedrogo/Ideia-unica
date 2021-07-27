@@ -3,7 +3,7 @@ if game.PlaceId == 3260590327 then
 end
 
 
-if game.PlaceId == 189707 then
+if game.PlaceId == 4832438542 then
   
 local cam = workspace.Camera
 local p
